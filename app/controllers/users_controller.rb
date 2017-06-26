@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
 
-  before_action :logged_in_user, only: [:edit, :update, :create, :index]
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy,
+    :following, :followers, :show]
   before_action :correct_user, only: [:edit, :update, :create]
   before_action :admin_user, only: :destroy
 
@@ -10,6 +11,8 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find_by id: params[:id]
+    @microposts = @user.microposts.paginate page: params[:page]
+    @comment = Comment.new
   end
 
   def new
@@ -48,6 +51,20 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
 
+  def following
+    @title = "Following"
+    @user  = User.find(params[:id])
+    @users = @user.following.paginate(page: params[:page])
+    render "show_follow"
+  end
+
+  def followers
+    @title = "Followers"
+    @user  = User.find(params[:id])
+    @users = @user.followers.paginate(page: params[:page])
+    render "show_follow"
+  end
+
   private
 
   def user_params
@@ -57,8 +74,8 @@ class UsersController < ApplicationController
   def logged_in_user
     unless logged_in?
       store_location
-      flash[:danger] = "Please log in."
-      redirect_to login_url
+      flash[:info] = "Want to have more fun! Please log in."
+      @microposts = Micropost.all
     end
   end
 
