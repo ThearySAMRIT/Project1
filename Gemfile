@@ -20,7 +20,6 @@ gem "jquery-rails", "~> 4.3", ">= 4.3.1"
 gem "mini_magick", "~> 4.5", ">= 4.5.1"
 gem "puma", "~> 3.7"
 gem "rails", "~> 5.1.1"
-gem "sqlite3"
 gem "sass-rails", "~> 5.0"
 gem "turbolinks", "~> 5"
 gem "uglifier", ">= 1.3.0"
@@ -41,7 +40,7 @@ group :development do
 end
 
 group :production do
-  gem "pg", "~> 0.18.4"
+  gem "pg"
 end
 
 
