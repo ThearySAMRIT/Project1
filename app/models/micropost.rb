@@ -1,0 +1,18 @@
+class Micropost < ApplicationRecord
+  belongs_to :user
+  has_many :comments
+  scope :load_feed, -> {order created_at: :desc}
+  mount_uploader :picture, PictureUploader
+  validates :user_id, presence: true
+  validates :content, presence: true, length: {maximum: 140}
+  validates :title, presence: true, length: {maximum: 40}
+  validate  :picture_size
+
+  private
+
+  def picture_size
+    if picture.size > 10.megabytes
+      errors.add(:picture, "should be less than 10MB")
+    end
+  end
+end
